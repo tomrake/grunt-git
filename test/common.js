@@ -3,11 +3,11 @@
 var grunt = require('grunt');
 
 function handleSpawnOutput(command, args, cb) {
-    return function (err, result) {
+    return function (err, result, code) {
         if (!err) {
             cb();
         } else {
-            cb(new Error(command  + JSON.stringify(args) + ': ' + JSON.stringify(result)));
+            cb(new Error(command  + JSON.stringify(args) + ': ' + JSON.stringify(result)) + ':  ' + code);
         }
     };
 }
@@ -31,6 +31,21 @@ function genCommand(folder, command, args) {
 function Repo(path) {
     return {
         path: path,
+        readConfigMessage: function (cb, key) {
+            grunt.util.spawn({
+                cmd: "git",
+                args: ["config", "--get-all", key],
+                opts: {
+                    cwd: this.path
+                }
+            }, function (err, result) {
+                if (err) {
+                    return cb(err);
+                } else {
+                    return cb(null, result.stdout.trim());
+                }
+            });
+        },
         readCommitMessage: function (cb) {
             grunt.util.spawn({
                 cmd: "git",

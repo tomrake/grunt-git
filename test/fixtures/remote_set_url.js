@@ -10,10 +10,18 @@ module.exports = function (grunt) {
                     tracking: ['master', 'debug'],
                     url: 'https://github.com/rubenv/grunt-git.git'
                 }
+            },
+            seturl: {
+                options: {
+                    command: 'set-url',
+                    name: 'testing',
+                    "new": 'https://github.com/tomrake/grunt-git.git',
+                    old: 'https://github.com/rubenv/grunt-git.git'
+                }
             }
-        },
+        }
     });
 
     grunt.loadTasks('../../tasks');
-    grunt.registerTask('default', ['gitremote']);
+    grunt.registerTask('default', ['gitremote:add', 'gitremote:seturl']);
 };

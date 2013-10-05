@@ -16,13 +16,11 @@ describe('remote - add', function () {
         });
     });
 
-
-    it('should create remote', function (done) {
-        fs.readFile(repo.path + '/.git/config', 'utf8', function (err, data) {
-            assert(data.match(/\[remote \"testing\"\]/));
-            done();
-        });
+    it('should create a remote in the config', function (done) {
+        repo.readConfigMessage(function (err, message) {
+            assert.equal(message, "https://github.com/rubenv/grunt-git.git");
+        }, "remote.testing.url");
+        done();
     });
-
-
+    
 });

@@ -240,13 +240,13 @@ module.exports = function (grunt) {
                     args = args.concat(['--verbose']);
                 }
                 args = args.concat(['add']);
-                if (options.tracking) {
-                    if (Object.prototype.toString.call(options.tracking) === "[object Array]") {
-                        options.tracking.forEach(function (item) {
+                if (options.track) {
+                    if (Object.prototype.toString.call(options.track) === "[object Array]") {
+                        options.track.forEach(function (item) {
                             args = args.concat(['-t', item]);
                         });
                     } else {
-                        args = args.concat(['-t', options.tracking]);
+                        args = args.concat(['-t', options.track]);
                     }
                 }
                 if (options.master) {
@@ -308,6 +308,84 @@ module.exports = function (grunt) {
                 } else {
                     grunt.log.error('gitremote remove must define a new name');
                 }                            
+                break;
+            case 'set-head':
+                if (options.verbose) {
+                    args = args.concat(['--verbose']);
+                }
+                args = args.concat(['set-head']);
+                if (options.name) {
+                    args = args.concat([options.name]);
+                } else {
+                    grunt.log.error('gitremote set-head must define a name');
+                }
+                if (options.add) {
+                    args = args.concat('-a');
+                } else if (options["delete"]) {
+                    args = args.concat('-d');
+                } else if (options.branch) {
+                    args = args.concat(options.branch);
+                } else {
+                    grunt.log.error('gitremote set-head must specify add, delete or a branch');
+                    return;
+                }
+                break;
+            case 'set-branches':
+                if (options.verbose) {
+                    args = args.concat(['--verbose']);
+                }
+                args = args.concat(['set-branches']);
+                if (options.add) {
+                    args = args.concat(['--add']);
+                }            
+                if (options.name) {
+                    args = args.concat([options.name]);
+                } else {
+                    grunt.log.error('gitremote set-branches must define a name');
+                    return;
+                }
+                if (options.track) {
+                    if (Object.prototype.toString.call(options.track) === "[object Array]") {
+                        options.track.forEach(function (item) {
+                            args = args.concat([item]);
+                        });
+                    } else {
+                        args = args.concat([options.track]);
+                    }
+                } else {
+                    grunt.log.error('gitremote set-branches must define a list of branches to track');
+                    return;
+                }
+                break;
+            case 'set-url':
+                if (options.verbose) {
+                    args = args.concat(['--verbose']);
+                }
+                args = args.concat(['set-url']);
+                if (options.add) {
+                    args = args.concat(['--add']);
+                }
+                if (options.remove) {
+                    args = args.concat(['--remove']);
+                }
+                if (options.push) {
+                    args = args.concat(['--push']);
+                }
+                if (options.name) {
+                    args = args.concat([options.name]);
+                } else {
+                    grunt.log.error('gitremote set-url requires a remote name');
+                    return; 
+                }
+                if (options["new"]) {
+                    args = args.concat([options["new"]]);
+                } else {
+                    grunt.log.error('gitremote set-url requires a new url');
+                    return; 
+                }
+                if (options.old) {
+                    args = args.concat([options.old]);
+                }              
                 break;
             default:
                 grunt.log.error('gitremote ' + options.command + ' is unknown');

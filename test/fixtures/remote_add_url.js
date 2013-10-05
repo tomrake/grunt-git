@@ -6,20 +6,22 @@ module.exports = function (grunt) {
             add: {
                 options: {
                     command: 'add',
-                    name: 'first',
+                    name: 'testing',
+                    tracking: ['master', 'debug'],
                     url: 'https://github.com/rubenv/grunt-git.git'
                 }
             },
-            rename: {
+            seturl: {
                 options: {
-                    command: 'rename',
-                    old: 'first',
-                    "new": 'testing'
+                    command: 'set-url',
+                    name: 'testing',
+                    add: true,
+                    "new": 'https://github.com/tomrake/grunt-git.git'
                 }
             }
-        },
+        }
     });
 
     grunt.loadTasks('../../tasks');
-    grunt.registerTask('default', ['gitremote:add', 'gitremote:rename']);
+    grunt.registerTask('default', ['gitremote:add', 'gitremote:seturl']);
 };
