@@ -15,16 +15,9 @@ module.exports = function (grunt) {
                 options: {
                     command: 'set-url',
                     name: 'testing',
+                    push: true,
                     add: true,
-                    "new": 'https://github.com/tomrake/grunt-git.git'
-                }
-            },
-            seturlremove: {
-                options: {
-                    command: 'set-url',
-                    name: 'testing',
-                    remove: true,
-                    "old": 'https://github.com/rubenv/grunt-git.git'
+                    urls: ['https://github.com/tomrake/grunt-git.git']
                 }
             }
         }

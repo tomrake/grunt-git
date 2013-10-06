@@ -11,17 +11,25 @@ module.exports = function (grunt) {
                     url: 'https://github.com/rubenv/grunt-git.git'
                 }
             },
-            seturl: {
+            seturladd: {
                 options: {
                     command: 'set-url',
                     name: 'testing',
-                    "new": 'https://github.com/tomrake/grunt-git.git',
-                    old: 'https://github.com/rubenv/grunt-git.git'
+                    add: true,
+                    urls: ['https://github.com/tomrake/grunt-git.git']
+                }
+            },
+            seturlremove: {
+                options: {
+                    command: 'set-url',
+                    name: 'testing',
+                    remove: true,
+                    urls: ['https://github.com/rubenv/grunt-git.git']
                 }
             }
         }
     });
 
     grunt.loadTasks('../../tasks');
-    grunt.registerTask('default', ['gitremote:add', 'gitremote:seturl']);
+    grunt.registerTask('default', ['gitremote:add', 'gitremote:seturladd', 'gitremote:seturlremove']);
 };

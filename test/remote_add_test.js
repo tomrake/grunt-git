@@ -5,7 +5,7 @@ var grunt = require('grunt');
 var assert = require('assert');
 var common = require('./common');
 
-describe('remote - add', function () {
+describe('remote:add', function () {
     var repo = null;
     var data;
 
@@ -19,8 +19,8 @@ describe('remote - add', function () {
     it('should create a remote in the config', function (done) {
         repo.readConfigMessage(function (err, message) {
             assert.equal(message, "https://github.com/rubenv/grunt-git.git");
+            done(err);
         }, "remote.testing.url");
-        done();
     });
     
 });

@@ -358,15 +358,20 @@ module.exports = function (grunt) {
                 }
                 break;
             case 'set-url':
+                var change = false;
                 if (options.verbose) {
                     args = args.concat(['--verbose']);
                 }
                 args = args.concat(['set-url']);
-                if (options.add) {
+                if (options.add && options.remove) {
+                    grunt.log.error('gitremote set-url can not set both add and remove');
+                    return;
+                } else if (options.add) {
                     args = args.concat(['--add']);
-                }
-                if (options.remove) {
-                    args = args.concat(['--remove']);
+                } else if (options.remove) {
+                    args = args.concat(['--delete']);
+                } else {
+                    change = true;
                 }
                 if (options.push) {
                     args = args.concat(['--push']);
@@ -377,22 +382,43 @@ module.exports = function (grunt) {
                     grunt.log.error('gitremote set-url requires a remote name');
                     return; 
                 }
-                if (options["new"]) {
-                    args = args.concat([options["new"]]);
+                var url_count = 0;
+                if (options.urls) {
+                    if (Object.prototype.toString.call(options.urls) === "[object Array]") {
+                        options.urls.forEach(function (item) {
+                            url_count ++;
+                            args = args.concat([item]);
+                        });
+                    } else {
+                        url_count ++;
+                        args = args.concat([options.urls]);
+                    }
                 } else {
-                    grunt.log.error('gitremote set-url requires a new url');
+                    grunt.log.error('gitremote set-url requires a urls');
                     return; 
                 }
-                if (options.old) {
-                    args = args.concat([options.old]);
-                }              
+                switch (url_count) {
+                case 0:
+                    grunt.log.error('girremote set-url: requires one or two urls');
+                    return;
+                case 1:
+                    break;
+                case 2:
+                    if (!change) {
+                        grunt.log.error('gitremote set-url add or remove requies only 1 url');
+                        return;
+                    }
+                    break;
+                default:
+                    grunt.log.error('gitremote set-url: to many urls specified');
+                    return;
+                }
                 break;
             default:
                 grunt.log.error('gitremote ' + options.command + ' is unknown');
                 return;                  
             }
         }
- 
  
         var done = this.async();
         

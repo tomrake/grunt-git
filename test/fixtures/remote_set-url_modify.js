@@ -15,8 +15,7 @@ module.exports = function (grunt) {
                 options: {
                     command: 'set-url',
                     name: 'testing',
-                    add: true,
-                    "new": 'https://github.com/tomrake/grunt-git.git'
+                    urls: [ 'https://github.com/tomrake/grunt-git.git', 'https://github.com/rubenv/grunt-git.git']
                 }
             }
         }

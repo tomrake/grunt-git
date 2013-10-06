@@ -5,22 +5,22 @@ var grunt = require('grunt');
 var assert = require('assert');
 var common = require('./common');
 
-describe('remote - delete url - change', function () {
+describe('remote:set-url:add push', function () {
     var repo = null;
     var data;
 
     before(function (done) {
-        common.setupAndRun('remote_delete_url', function (err, r) {
+        common.setupAndRun('remote_set-url_add_push', function (err, r) {
             repo = r;
             done(err);
         });
     });
 
-    it('should change remove a url', function (done) {
+    it('should change remove a push url', function (done) {
         repo.readConfigMessage(function (err, message) {
             assert(message.match(/https\:\/\/github.com\/tomrake\/grunt\-git.git/));
-        }, "remote.testing.url");
-        done();
+            done(err);
+        }, "remote.testing.pushurl");
     });
     
 });

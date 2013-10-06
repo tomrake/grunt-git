@@ -38,9 +38,9 @@ function Repo(path) {
                 opts: {
                     cwd: this.path
                 }
-            }, function (err, result) {
+            }, function (err, result, code) {
                 if (err) {
-                    return cb(err);
+                    return cb(err, result, code);
                 } else {
                     return cb(null, result.stdout.trim());
                 }

@@ -7,18 +7,21 @@ module.exports = function (grunt) {
                 options: {
                     command: 'add',
                     name: 'testing',
+                    tracking: ['master', 'debug'],
                     url: 'https://github.com/rubenv/grunt-git.git'
                 }
             },
-            remove: {
+            seturl: {
                 options: {
-                    command: 'remove',
-                    name: 'testing'
+                    command: 'set-url',
+                    name: 'testing',
+                    add: true,
+                    urls: ['https://github.com/tomrake/grunt-git.git']
                 }
             }
-        },
+        }
     });
 
     grunt.loadTasks('../../tasks');
-    grunt.registerTask('default', ['gitremote:add', 'gitremote:remove']);
+    grunt.registerTask('default', ['gitremote:add', 'gitremote:seturl']);
 };
