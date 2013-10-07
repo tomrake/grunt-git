@@ -268,7 +268,7 @@ module.exports = function (grunt) {
                         break;
                     default:
                         grunt.log.error('gitremote mirror=' + options.mirror +
-                        ' not understood?'); 
+                        ' not understood?');
                     }
                 }
                 if (options.name) {
@@ -291,7 +291,7 @@ module.exports = function (grunt) {
                     args = args.concat([options.name]);
                 } else {
                     grunt.log.error('gitremote remove must define a name');
-                }            
+                }
                 break;
             case 'rename':
                 if (options.verbose) {
@@ -307,7 +307,7 @@ module.exports = function (grunt) {
                     args = args.concat([options["new"]]);
                 } else {
                     grunt.log.error('gitremote remove must define a new name');
-                }                            
+                }
                 break;
             case 'set-head':
                 if (options.verbose) {
@@ -337,7 +337,7 @@ module.exports = function (grunt) {
                 args = args.concat(['set-branches']);
                 if (options.add) {
                     args = args.concat(['--add']);
-                }            
+                }
                 if (options.name) {
                     args = args.concat([options.name]);
                 } else {
@@ -380,7 +380,7 @@ module.exports = function (grunt) {
                     args = args.concat([options.name]);
                 } else {
                     grunt.log.error('gitremote set-url requires a remote name');
-                    return; 
+                    return;
                 }
                 var url_count = 0;
                 if (options.urls) {
@@ -395,7 +395,7 @@ module.exports = function (grunt) {
                     }
                 } else {
                     grunt.log.error('gitremote set-url requires a urls');
-                    return; 
+                    return;
                 }
                 switch (url_count) {
                 case 0:
@@ -414,23 +414,47 @@ module.exports = function (grunt) {
                     return;
                 }
                 break;
+            case "show":
+                if (options.verbose) {
+                    args = args.concat(['--verbose']);
+                }
+                args = args.concat(['show']);
+                if (options.noQuery) {
+                    args = args.concat(['-n']);
+                }
+                if (options.name) {
+                    args = args.concat([options.name]);
+                } else {
+                    grunt.log.error('gitremote show required a name for the remote');
+                }
+                break;
             default:
                 grunt.log.error('gitremote ' + options.command + ' is unknown');
-                return;                  
+                return;
             }
         }
- 
+
         var done = this.async();
-        
+
 
         grunt.util.spawn({
             cmd: "git",
             args: args
         }, function (err) {
-            done(!err);
-        });        
-    
+            if (err) {
+                if (err.stdout) {
+                    grunt.log(err.stdout);
+                }
+                if (err.stderr) {
+                    grunt.warn(err.stderr);
+                }
+                done(err.code);
+            } else {
+                done();
+            }
+        });
+
     });
-    
+
 
 };
