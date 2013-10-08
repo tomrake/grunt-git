@@ -3,13 +3,14 @@
 var grunt = require('grunt');
 
 function handleSpawnOutput(command, args, cb) {
-    return function (err, result, code) {
-        if (!err) {
-            cb();
-        } else {
-            cb(new Error(command  + JSON.stringify(args) + ': ' + JSON.stringify(result)) + ':  ' + code);
-        }
-    };
+    return function (error, result, code) {
+                if (code) {
+                    grunt.log.errorlns('Error: ' + code);
+                    grunt.log.errorlns(result.stderr);
+                } else {
+                    grunt.log.writeln(result.stdout);
+                }
+            };
 }
 
 function runCommand(folder, command, args, cb) {

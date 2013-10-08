@@ -440,17 +440,12 @@ module.exports = function (grunt) {
         grunt.util.spawn({
             cmd: "git",
             args: args
-        }, function (err) {
-            if (err) {
-                if (err.stdout) {
-                    grunt.log(err.stdout);
-                }
-                if (err.stderr) {
-                    grunt.warn(err.stderr);
-                }
-                done(err.code);
+        }, function (error, result, code) {
+            if (code) {
+                grunt.log.errorlns('Error: ' + code);
+                grunt.log.errorlns(result.stderr);
             } else {
-                done();
+                grunt.log.writeln(result.stdout);
             }
         });
 
