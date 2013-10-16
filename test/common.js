@@ -2,30 +2,39 @@
 
 var grunt = require('grunt');
 
-function handleSpawnOutput(command, args, cb) {
+function handleSpawnOutput(command, args, verbose_git, cb) {
     return function (error, result, code) {
                 if (code) {
+                    if (result.stdout) {
+                        grunt.log.writeln(result.stdout);
+                    }
                     grunt.log.errorlns('Error: ' + code);
-                    grunt.log.errorlns(result.stderr);
+                    if (result.stderr) {
+                        grunt.log.errorlns(result.stderr);
+                    }
+                    cb(new Error('Error code: ' + code));
                 } else {
-                    grunt.log.writeln(result.stdout);
+                    if (verbose_git && result.stdout) {
+                        grunt.log.writeln(result.stdout);
+                    }
+                    cb();
                 }
             };
 }
 
-function runCommand(folder, command, args, cb) {
+function runCommand(folder, command, args, verbose_git, cb) {
     grunt.util.spawn({
         cmd: command,
         args: args,
         opts: {
             cwd: folder
         }
-    }, handleSpawnOutput(command, args, cb));
+    }, handleSpawnOutput(command, args, verbose_git, cb));
 }
 
-function genCommand(folder, command, args) {
+function genCommand(folder, command, args, verbose_git) {
     return function (cb) {
-        runCommand(folder, command, args, cb);
+        runCommand(folder, command, args, verbose_git, cb);
     };
 }
 
@@ -88,7 +97,7 @@ module.exports = {
                 cb();
             },
             function (cb) { before(repo, cb); },
-            genCommand(repo.path, 'grunt'),
+            genCommand(repo.path, 'grunt', [], true),
             function (cb) {
                 repo.currentRef = grunt.file.read(repo.path + '/.git/refs/heads/master').trim();
                 cb();
